@@ -1,16 +1,24 @@
 # Created by Connor Steele
-from asyncore import write
-
+print("Path to input file:")
 filepath = input()
+print("File to process:")
 filename = input()
 fullpath = filepath + '\\' + filename
-out = open(filepath + '\\' + 'cleanmarkers.txt', 'w+')
 
+# Make sure the full path to the file is valid
+try:
+    f = open(fullpath, 'r', encoding='utf-16')
+except OSError:
+    fullpath = "\"" + fullpath + "\""
+    print("\nInput file does not exist:", fullpath)
+    print("Program will now terminate\n")
+    quit()
+
+out = open(filepath + '\\' + 'CleanMarks.txt', 'w+')
 count = 0
-
 out.write("Video Chapters\n")
 
-with open(fullpath, 'r', encoding='utf-16') as f:
+with f:
     for line in f:
         # Skip the first line
         if (count > 0):
@@ -22,7 +30,7 @@ with open(fullpath, 'r', encoding='utf-16') as f:
                     out.write(char)
                 chari += 1
             out.write(' ')
-            # See if you can make the code below faster
+            # Write all remaining characters in the line and seperate words
             for i in range (2, len(strbuf)):
                 for char in strbuf[i]:
                     out.write(char)
